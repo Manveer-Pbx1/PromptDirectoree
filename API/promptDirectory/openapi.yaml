@@ -1,0 +1,314 @@
+openapi: 3.0.3
+info:
+  title: Prompt Directory API
+  description: |
+    A REST API for managing prompts with CRUD operations.
+    This API allows you to create, read, update, and delete prompts stored in MongoDB.
+  version: 1.0.0
+paths:
+  /prompts:
+    get:
+      summary: Get all prompts
+      description: Retrieve a list of all prompts, sorted by creation date (newest first)
+      operationId: getPrompts
+      tags:
+        - Prompts
+      responses:
+        '200':
+          description: Successfully retrieved prompts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Prompt'
+              example:
+                - id: "507f1f77bcf86cd799439011"
+                  title: "ChatGPT Coding Assistant"
+                  content: "You are a helpful coding assistant. Help me write clean, efficient code."
+                  created_at: "2025-06-27T10:30:00Z"
+                  updated_at: "2025-06-27T10:30:00Z"
+                - id: "507f1f77bcf86cd799439012"
+                  title: "Marketing Copy Writer"
+                  content: "Create compelling marketing copy for social media posts."
+                  created_at: "2025-06-26T15:45:00Z"
+                  updated_at: "2025-06-26T15:45:00Z"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Create a new prompt
+      description: Create a new prompt with title and content
+      operationId: createPrompt
+      tags:
+        - Prompts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromptCreate'
+            example:
+              title: "Email Writer"
+              content: "Write professional emails with proper tone and structure."
+      responses:
+        '201':
+          description: Prompt created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prompt'
+              example:
+                id: "507f1f77bcf86cd799439013"
+                title: "Email Writer"
+                content: "Write professional emails with proper tone and structure."
+                created_at: "2025-06-27T12:00:00Z"
+                updated_at: "2025-06-27T12:00:00Z"
+        '400':
+          description: Bad request - validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              example:
+                title: ["This field is required."]
+                content: ["This field may not be blank."]
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /prompts/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: MongoDB ObjectId of the prompt
+        schema:
+          type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+        example: "507f1f77bcf86cd799439011"
+
+    get:
+      summary: Get a specific prompt
+      description: Retrieve a single prompt by its ID
+      operationId: getPromptById
+      tags:
+        - Prompts
+      responses:
+        '200':
+          description: Successfully retrieved prompt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prompt'
+              example:
+                id: "507f1f77bcf86cd799439011"
+                title: "ChatGPT Coding Assistant"
+                content: "You are a helpful coding assistant. Help me write clean, efficient code."
+                created_at: "2025-06-27T10:30:00Z"
+                updated_at: "2025-06-27T10:30:00Z"
+        '404':
+          description: Prompt not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: "Not Found"
+        '400':
+          description: Invalid ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Update a prompt
+      description: Update an existing prompt's title and content
+      operationId: updatePrompt
+      tags:
+        - Prompts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromptUpdate'
+            example:
+              title: "Advanced ChatGPT Coding Assistant"
+              content: "You are an expert coding assistant. Help me write clean, efficient, and well-documented code following best practices."
+      responses:
+        '200':
+          description: Prompt updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prompt'
+              example:
+                id: "507f1f77bcf86cd799439011"
+                title: "Advanced ChatGPT Coding Assistant"
+                content: "You are an expert coding assistant. Help me write clean, efficient, and well-documented code following best practices."
+                created_at: "2025-06-27T10:30:00Z"
+                updated_at: "2025-06-27T14:15:00Z"
+        '400':
+          description: Bad request - validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '404':
+          description: Prompt not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: "Not Found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete a prompt
+      description: Delete an existing prompt by its ID
+      operationId: deletePrompt
+      tags:
+        - Prompts
+      responses:
+        '204':
+          description: Prompt deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Successfully deleted prompt"
+        '404':
+          description: Prompt not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: "Not Found"
+        '400':
+          description: Invalid ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Prompt:
+      type: object
+      required:
+        - id
+        - title
+        - content
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          description: MongoDB ObjectId as string
+          example: "507f1f77bcf86cd799439011"
+        title:
+          type: string
+          maxLength: 255
+          description: Title of the prompt
+          example: "ChatGPT Coding Assistant"
+        content:
+          type: string
+          description: Content/body of the prompt
+          example: "You are a helpful coding assistant. Help me write clean, efficient code."
+        created_at:
+          type: string
+          format: date-time
+          description: When the prompt was created
+          example: "2025-06-27T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: When the prompt was last updated
+          example: "2025-06-27T10:30:00Z"
+
+    PromptCreate:
+      type: object
+      required:
+        - title
+        - content
+      properties:
+        title:
+          type: string
+          maxLength: 255
+          description: Title of the prompt
+          example: "Email Writer"
+        content:
+          type: string
+          description: Content/body of the prompt
+          example: "Write professional emails with proper tone and structure."
+
+    PromptUpdate:
+      type: object
+      required:
+        - title
+        - content
+      properties:
+        title:
+          type: string
+          maxLength: 255
+          description: Updated title of the prompt
+          example: "Advanced Email Writer"
+        content:
+          type: string
+          description: Updated content/body of the prompt
+          example: "Write professional emails with proper tone, structure, and business etiquette."
+
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Error message
+          example: "Not Found"
+
+    ValidationError:
+      type: object
+      description: Validation errors for request fields
+      additionalProperties:
+        type: array
+        items:
+          type: string
+      example:
+        title: ["This field is required."]
+        content: ["This field may not be blank."]
+
+tags:
+  - name: Prompts
+    description: Operations related to prompt management

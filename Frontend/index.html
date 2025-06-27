@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PromptDirectory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="max-w-2xl mx-auto bg-white shadow-md rounded-xl p-6 space-y-6">
+        <h1 class="text-3xl font-bold text-center text-blue-700">PromptDirectory</h1>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 text-sm text-gray-800">
+    <h2 class="font-semibold text-blue-700 mb-2">Available API Endpoints:</h2>
+    <ul class="list-disc pl-5 space-y-1">
+        <li><code class="bg-gray-100 px-1 py-0.5 rounded text-blue-900">GET</code> /api/prompts</li>
+        <li><code class="bg-gray-100 px-1 py-0.5 rounded text-blue-900">POST</code> /api/prompts</li>
+        <li><code class="bg-gray-100 px-1 py-0.5 rounded text-blue-900">GET</code> /api/prompts/{id}</li>
+        <li><code class="bg-gray-100 px-1 py-0.5 rounded text-blue-900">PUT</code> /api/prompts/{id}</li>
+        <li><code class="bg-gray-100 px-1 py-0.5 rounded text-blue-900">DELETE</code> /api/prompts/{id}</li>
+    </ul>
+</div>
+
+
+        <div>
+            <label for="method" class="block font-semibold">Method:</label>
+            <select id="method" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="url" class="block font-semibold">Request URL:</label>
+            <input type="text" id="url" placeholder="http://localhost:8000/your-endpoint"
+                class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+        </div>
+
+        <div>
+            <label for="body" class="block font-semibold">Request Body (for POST/PUT):</label>
+            <textarea id="body" rows="10"
+                class="mt-1 block w-full border border-gray-300 rounded-md p-2 font-mono">{}</textarea>
+        </div>
+
+        <div class="text-center">
+            <button onclick="sendRequest(document.getElementById('method').value)"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-md shadow">
+                Send Request
+            </button>
+        </div>
+
+        <div>
+            <h2 class="text-xl font-semibold">Response:</h2>
+            <pre id="response" class="bg-gray-100 border border-gray-300 p-4 rounded-md overflow-auto text-sm"></pre>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
