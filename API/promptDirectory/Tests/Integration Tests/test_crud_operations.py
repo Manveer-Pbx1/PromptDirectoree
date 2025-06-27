@@ -1,6 +1,7 @@
 import pytest
 from pymongo import MongoClient
 
+@pytest.mark.integration
 def test_crud_workflow(test_mongo_settings, sample_prompt_data):
     client = MongoClient(test_mongo_settings['host'], test_mongo_settings['port'])
     db = client[test_mongo_settings['database']]
@@ -10,7 +11,7 @@ def test_crud_workflow(test_mongo_settings, sample_prompt_data):
     _id = inserted.inserted_id
 
     found = collection.find_one({"_id": _id})
-    assert found is not None
+    assert found["title"] == sample_prompt_data["title"]
 
     collection.update_one({"_id": _id}, {"$set": {"title": "Updated"}})
     updated = collection.find_one({"_id": _id})

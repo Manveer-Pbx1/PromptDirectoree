@@ -38,9 +38,9 @@ jobs:
     - name: 🧪 Run Tests
       run: |
         cd API/promptDirectory
-        pytest --cov=prompts --cov-report=term-missing
+        pytest -m "not integration and not api" --cov=prompts --cov-report=term-missing -v
 
-  lint:
+  lint: 
     name: 🔍 Code Quality
     runs-on: ubuntu-latest
 
