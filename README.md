@@ -14,6 +14,7 @@ Create, View, Update, and Delete prompts on PromptDirectory — A community for 
 6. [Running the Frontend Locally](#running-the-frontend-locally)
 7. [Interacting with the API](#interacting-with-the-api)
 8. [Running the Tests](#running-the-tests)
+9. [CI/CD Pipeline](#ci/cd-pipeline)
 
 ---
 
@@ -155,6 +156,11 @@ To run the tests, do the following:
 This is the final coverage report (74%) that is obtained:
 ![image](https://github.com/user-attachments/assets/2fb0c3a2-64fa-4715-9d58-158778235698)
 
+---
 
+## CI/CD Pipeline
+Navigate to the `.github/workflows` folder to check the CI and CI/CD configurations files.
+
+The files consists of the pre-defined tests and Keploy set up.
 
    
