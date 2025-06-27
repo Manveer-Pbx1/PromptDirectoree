@@ -13,17 +13,6 @@ jobs:
   test:
     name: 🧪 Run Tests
     runs-on: ubuntu-latest
-    
-    services:
-      mongodb:
-        image: mongo:7.0
-        ports:
-          - 27017:27017
-        options: >-
-          --health-cmd "mongosh --eval 'db.runCommand({ping: 1})'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
 
     steps:
     - name: 📥 Checkout Repository
@@ -40,23 +29,16 @@ jobs:
         pip install -r requirements.txt
         pip install pytest pytest-django pytest-cov
 
-    - name: 🛠️ Install Keploy CLI
-      run: |
-        curl --silent -L https://keploy.io/ent/install.sh | bash
-
     - name: 🔧 Setup Database
-      env:
-        MONGO_URI: mongodb://localhost:27017
-        MONGO_DB: promptDirectory_test
       run: |
         cd API/promptDirectory
         python manage.py makemigrations
         python manage.py migrate
-        
-    - name: Run Keploy Test Suite
-      run: |
-        export KEPLOY_API_KEY=${{ secrets.KEPLOY_API_KEY }} && keploy test-suite --app=6b790b75-a578-4db7-b83b-0ddd61d9fff3 --base-path http://localhost:8000/api --cloud
 
+    - name: 🧪 Run Tests
+      run: |
+        cd API/promptDirectory
+        pytest -v
 
   lint:
     name: 🔍 Code Quality
@@ -78,12 +60,12 @@ jobs:
 
     - name: 🎨 Check Code Formatting
       run: |
-        cd  API/promptDirectory
+        cd API/promptDirectory
         black --check .
       continue-on-error: true
 
     - name: 🔍 Lint Code
       run: |
-        cd  API/promptDirectory
+        cd API/promptDirectory
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
       continue-on-error: true
