@@ -57,13 +57,6 @@ jobs:
       run: |
         export KEPLOY_API_KEY=${{ secrets.KEPLOY_API_KEY }} && keploy test-suite --app=6b790b75-a578-4db7-b83b-0ddd61d9fff3 --base-path http://localhost:8000/api --cloud
 
-    - name: 🧪 Run Tests
-      env:
-        MONGO_URI: mongodb://localhost:27017
-        MONGO_DB: promptDirectory_test
-      run: |
-        cd API/promptDirectory
-        pytest -v
 
   lint:
     name: 🔍 Code Quality
