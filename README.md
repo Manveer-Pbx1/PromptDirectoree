@@ -163,4 +163,9 @@ Navigate to the `.github/workflows` folder to check the CI and CI/CD configurati
 
 The files consists of the pre-defined tests and Keploy set up.
 
+Below is the screenshot of the test reports from the Keploy API Testing Dashboard:
+
+![image](https://github.com/user-attachments/assets/26d69e0b-a7dd-4cf7-9b9a-2c235c5e39b6)
+
+
    
