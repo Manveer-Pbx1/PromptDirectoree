@@ -38,7 +38,7 @@ jobs:
     - name: 🧪 Run Tests
       run: |
         cd API/promptDirectory
-        pytest -v
+        pytest --cov=prompts --cov-report=term-missing
 
   lint:
     name: 🔍 Code Quality
