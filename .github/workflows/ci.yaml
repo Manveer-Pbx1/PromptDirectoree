@@ -36,13 +36,23 @@ jobs:
 
     - name: 📦 Install Dependencies
       run: |
+        cd API
         pip install -r requirements.txt
-        pip install pytest pytest-django
+        pip install pytest pytest-django pytest-cov
 
     - name: 🛠️ Install Keploy CLI
       run: |
         curl --silent -L https://keploy.io/ent/install.sh | bash
 
+    - name: 🔧 Setup Database
+      env:
+        MONGO_URI: mongodb://localhost:27017
+        MONGO_DB: promptDirectory_test
+      run: |
+        cd API/promptDirectory
+        python manage.py makemigrations
+        python manage.py migrate
+        
     - name: Run Keploy Test Suite
       run: |
         export KEPLOY_API_KEY=${{ secrets.KEPLOY_API_KEY }} && keploy test-suite --app=6b790b75-a578-4db7-b83b-0ddd61d9fff3 --base-path http://localhost:8000/api --cloud
@@ -53,7 +63,7 @@ jobs:
         MONGO_DB: promptDirectory_test
       run: |
         cd API/promptDirectory
-        python manage.py test
+        pytest -v
 
   lint:
     name: 🔍 Code Quality
